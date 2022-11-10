@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getRandomExp, getRandomNorm } from "../lib/randomizer";
 import * as Icon from "react-feather";
 
@@ -33,10 +33,23 @@ export default function MassServiceSystem({}: MSSProps) {
     //     };
     // });
 
+    const [tick, setTick] = useState(0);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setTick(tick + 1);
+        }, 1);
+
+        return () => {
+            clearTimeout(timeout);
+        };
+    });
+
     const [dist, setDist] = useState("exp");
     const [count, setCount] = useState(10000);
 
     const [avgT, setAvgT] = useState(100);
+    const [sigma, setSigma] = useState(40);
 
     const [distPlot, setDistPlot] = useState(new Array<DistData>());
 
@@ -49,11 +62,17 @@ export default function MassServiceSystem({}: MSSProps) {
 
         let intervalCount = Math.round(5 * Math.log10(count));
 
-        let randomFunc = dist === "exp" ? getRandomExp : getRandomNorm;
+        let randomFunc = () => {
+            if (dist === "exp") {
+                return getRandomExp(avgT);
+            } else {
+                return getRandomNorm(avgT, sigma);
+            }
+        };
 
         let numbers = new Array<number>(count);
         for (let i = 0; i < count; i++) {
-            numbers[i] = randomFunc(avgT);
+            numbers[i] = randomFunc();
         }
 
         // let numbers = Array.from({ length: count }, () => randomFunc(avgT)); // [...Array(count)].map(() => randomFunc(avgT));
@@ -97,13 +116,15 @@ export default function MassServiceSystem({}: MSSProps) {
         setGenerating(false);
     };
 
-    console.log(distPlot);
-
     return (
         <div>
             <h1>Система массового обслуживания</h1>
 
+            <span>Тик: {tick}</span>
+
             <div>
+                <h1>Тест распределения</h1>
+
                 <div>
                     <label htmlFor="dist_type">Вид распределения</label>
                     <select
@@ -141,6 +162,22 @@ export default function MassServiceSystem({}: MSSProps) {
                     placeholder="Среднее время"
                     title="Среднее время"
                 ></input>
+
+                {dist === "norm" && (
+                    <>
+                        <label htmlFor="avgt_input">σ</label>
+                        <input
+                            id="sigma_input"
+                            type="number"
+                            value={sigma}
+                            onChange={(evt) => {
+                                setSigma(parseInt(evt.target.value, 10));
+                            }}
+                            placeholder="Сигма"
+                            title="Сигма"
+                        ></input>
+                    </>
+                )}
 
                 <div>
                     <button onClick={generateData}>Сгенерировать</button>
