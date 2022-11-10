@@ -1,13 +1,9 @@
-import Head from "next/head";
-import Image from "next/image";
-import React, { useEffect } from "react";
-import { ReactNode, useState } from "react";
-import Example from "../components/example";
+import React from "react";
 import MassServiceSystem from "../components/MassServiceSystem";
 
 export default function Home() {
     return (
-        <div>
+        <div className="container">
             {/* <Example delay={100}></Example> */}
             <MassServiceSystem></MassServiceSystem>
         </div>

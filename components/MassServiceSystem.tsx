@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { getRandomExp, getRandomNorm } from "../lib/randomizer";
-// import styles from "./mss.module.css";
+import * as Icon from "react-feather";
 
 import {
     LineChart,
@@ -21,8 +21,6 @@ interface DistData {
 }
 
 export default function MassServiceSystem({}: MSSProps) {
-    const [values, setValue] = useState(new Array<number>());
-
     // useEffect(() => {
     //     const timeout = setTimeout(() => {
     //         setValue([...values.slice(-10), getRandomExp(10)]);
@@ -38,9 +36,11 @@ export default function MassServiceSystem({}: MSSProps) {
 
     const [distPlot, setDistPlot] = useState(new Array<DistData>());
 
-    console.log(distPlot);
+    const [generating, setGenerating] = useState(false);
 
     const generateData = () => {
+        setGenerating(true);
+
         console.log("Generate", count);
 
         let intervalCount = Math.round(5 * Math.log10(count));
@@ -76,6 +76,7 @@ export default function MassServiceSystem({}: MSSProps) {
         }
 
         setDistPlot(distData);
+        setGenerating(false);
     };
 
     return (
@@ -103,6 +104,11 @@ export default function MassServiceSystem({}: MSSProps) {
 
                 <div>
                     <button onClick={generateData}>Сгенерировать</button>
+                    {generating && (
+                        <div>
+                            <Icon.Loader /> <span>Генерация...</span>
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -125,37 +131,12 @@ export default function MassServiceSystem({}: MSSProps) {
                     <Bar
                         type="monotone"
                         dataKey="value"
-                        fill="#84d8b4"
+                        fill="#9b4dca"
                         maxBarSize={200}
                     />
                     {/* <Line type="monotone" dataKey="value" stroke="#8884d8" /> */}
                 </BarChart>
             </div>
-
-            <ul>
-                {values.map((val) => (
-                    <li>{val}</li>
-                ))}
-            </ul>
-
-            {/* <Plot
-                data={[
-                    {
-                        x: [1, 2, 3],
-
-                        y: [2, 6, 3],
-
-                        type: "scatter",
-
-                        mode: "lines+markers",
-
-                        marker: { color: "red" }
-                    },
-
-                    { type: "bar", x: [1, 2, 3], y: [2, 5, 3] }
-                ]}
-                layout={{ width: 320, height: 240, title: "A Fancy Plot" }}
-            /> */}
         </div>
     );
 }
