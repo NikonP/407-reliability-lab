@@ -18,5 +18,5 @@ export function getRandomNorm(avgT: number): number {
         (Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v)) / 10.0 +
         0.5;
 
-    return res * avgT;
+    return res * (avgT * 2);
 }

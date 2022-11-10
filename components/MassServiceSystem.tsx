@@ -34,6 +34,8 @@ export default function MassServiceSystem({}: MSSProps) {
     const [dist, setDist] = useState("exp");
     const [count, setCount] = useState(10000);
 
+    const [avgT, setAvgT] = useState(100);
+
     const [distPlot, setDistPlot] = useState(new Array<DistData>());
 
     const [generating, setGenerating] = useState(false);
@@ -47,10 +49,10 @@ export default function MassServiceSystem({}: MSSProps) {
 
         let randomFunc = dist === "exp" ? getRandomExp : getRandomNorm;
 
-        let numbers = [...Array(count)].map(() => randomFunc(100));
+        let numbers = Array.from({ length: count }, () => randomFunc(avgT)); // [...Array(count)].map(() => randomFunc(avgT));
 
-        let maxVal = Math.max(...numbers);
-        let minVal = Math.min(...numbers);
+        let maxVal = Math.max.apply(null, numbers);
+        let minVal = Math.min.apply(null, numbers);
 
         console.log("Interval count", intervalCount);
         console.log("min-max", minVal, maxVal);
@@ -79,27 +81,49 @@ export default function MassServiceSystem({}: MSSProps) {
         setGenerating(false);
     };
 
+    console.log(distPlot);
+
     return (
         <div>
             <h1>Система массового обслуживания</h1>
 
-            <div style={{}}>
+            <div>
                 <div>
+                    <label htmlFor="dist_type">Вид распределения</label>
                     <select
+                        id="dist_type"
                         onChange={(evt) => setDist(evt.target.value)}
                         value={dist}
                     >
-                        <option value="exp">EXP</option>
-                        <option value="norm">Norm</option>
+                        <option value="exp">
+                            Экспоненциальное распределение
+                        </option>
+                        <option value="norm">Нормальное распределение</option>
                     </select>
                 </div>
 
+                <label htmlFor="count_input">Количество элементов</label>
                 <input
+                    id="count_input"
                     type="number"
                     value={count}
                     onChange={(evt) => {
                         setCount(parseInt(evt.target.value, 10));
                     }}
+                    placeholder="Количество элементов"
+                    title="Количество элементов"
+                ></input>
+
+                <label htmlFor="avgt_input">Среднее время</label>
+                <input
+                    id="avgt_input"
+                    type="number"
+                    value={avgT}
+                    onChange={(evt) => {
+                        setAvgT(parseInt(evt.target.value, 10));
+                    }}
+                    placeholder="Среднее время"
+                    title="Среднее время"
                 ></input>
 
                 <div>
@@ -112,31 +136,36 @@ export default function MassServiceSystem({}: MSSProps) {
                 </div>
             </div>
 
-            <div>
-                <BarChart
-                    width={800}
-                    height={400}
-                    data={distPlot.map((v) => {
-                        return {
-                            value: v.count,
-                            name: Math.round(v.rangeEnd)
-                        };
-                    })}
-                    barGap={0}
-                    barCategoryGap={0}
-                >
-                    <XAxis dataKey="name" domain={["auto", "auto"]} />
-                    <YAxis dataKey="value" domain={["auto", "auto"]} />
-                    <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-                    <Bar
-                        type="monotone"
-                        dataKey="value"
-                        fill="#9b4dca"
-                        maxBarSize={200}
-                    />
-                    {/* <Line type="monotone" dataKey="value" stroke="#8884d8" /> */}
-                </BarChart>
-            </div>
+            {distPlot.length > 0 ? (
+                <div>
+                    <BarChart
+                        width={800}
+                        height={400}
+                        data={distPlot.map((v) => {
+                            return {
+                                value: v.count,
+                                name: Math.round(v.rangeEnd)
+                            };
+                        })}
+                        barGap={0}
+                        barCategoryGap={0}
+                    >
+                        <XAxis dataKey="name" domain={["auto", "auto"]} />
+                        <YAxis dataKey="value" domain={["auto", "auto"]} />
+                        <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
+                        <Bar
+                            type="monotone"
+                            dataKey="value"
+                            fill="#9b4dca"
+                            maxBarSize={200}
+                        />
+                    </BarChart>
+                </div>
+            ) : (
+                <div>
+                    <Icon.ArrowUp /> Нажми сгенерировать
+                </div>
+            )}
         </div>
     );
 }
