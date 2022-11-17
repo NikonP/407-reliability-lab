@@ -1,11 +1,23 @@
+import Link from "next/link";
 import React from "react";
 import MassServiceSystem from "../components/MassServiceSystem";
+import * as Icon from "react-feather";
+import DistTest from "../components/DistTest";
 
 export default function Home() {
     return (
         <div className="container">
             {/* <Example delay={100}></Example> */}
-            <MassServiceSystem></MassServiceSystem>
+
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Link className="button" href="/">
+                    <Icon.BarChart2 size={16} /> Распределения
+                </Link>
+                <Link className="button button-outline" href="/simulation">
+                    <Icon.Cpu size={16} /> Симуляция
+                </Link>
+            </div>
+            <DistTest></DistTest>
         </div>
     );
 }
