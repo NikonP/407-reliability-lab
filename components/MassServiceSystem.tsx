@@ -13,6 +13,7 @@ import {
     ResponsiveContainer,
     Tooltip
 } from "recharts";
+import Model from "./Model";
 
 interface MSSProps {}
 
@@ -117,107 +118,115 @@ export default function MassServiceSystem({}: MSSProps) {
     };
 
     return (
-        <div>
+        <>
             <h1>Система массового обслуживания</h1>
 
             <span>Тик: {tick}</span>
 
             <div>
-                <h1>Тест распределения</h1>
-
+                <h2>Тест распределения</h2>
                 <div>
-                    <label htmlFor="dist_type">Вид распределения</label>
-                    <select
-                        id="dist_type"
-                        onChange={(evt) => setDist(evt.target.value)}
-                        value={dist}
-                    >
-                        <option value="exp">
-                            Экспоненциальное распределение
-                        </option>
-                        <option value="norm">Нормальное распределение</option>
-                    </select>
-                </div>
+                    <div>
+                        <label htmlFor="dist_type">Вид распределения</label>
+                        <select
+                            id="dist_type"
+                            onChange={(evt) => setDist(evt.target.value)}
+                            value={dist}
+                        >
+                            <option value="exp">
+                                Экспоненциальное распределение
+                            </option>
+                            <option value="norm">
+                                Нормальное распределение
+                            </option>
+                        </select>
+                    </div>
 
-                <label htmlFor="count_input">Количество элементов</label>
-                <input
-                    id="count_input"
-                    type="number"
-                    value={count}
-                    onChange={(evt) => {
-                        setCount(parseInt(evt.target.value, 10));
-                    }}
-                    placeholder="Количество элементов"
-                    title="Количество элементов"
-                ></input>
+                    <label htmlFor="count_input">Количество элементов</label>
+                    <input
+                        id="count_input"
+                        type="number"
+                        value={count}
+                        onChange={(evt) => {
+                            setCount(parseInt(evt.target.value, 10));
+                        }}
+                        placeholder="Количество элементов"
+                        title="Количество элементов"
+                    ></input>
 
-                <label htmlFor="avgt_input">Среднее время</label>
-                <input
-                    id="avgt_input"
-                    type="number"
-                    value={avgT}
-                    onChange={(evt) => {
-                        setAvgT(parseInt(evt.target.value, 10));
-                    }}
-                    placeholder="Среднее время"
-                    title="Среднее время"
-                ></input>
+                    <label htmlFor="avgt_input">Среднее время</label>
+                    <input
+                        id="avgt_input"
+                        type="number"
+                        value={avgT}
+                        onChange={(evt) => {
+                            setAvgT(parseInt(evt.target.value, 10));
+                        }}
+                        placeholder="Среднее время"
+                        title="Среднее время"
+                    ></input>
 
-                {dist === "norm" && (
-                    <>
-                        <label htmlFor="avgt_input">σ</label>
-                        <input
-                            id="sigma_input"
-                            type="number"
-                            value={sigma}
-                            onChange={(evt) => {
-                                setSigma(parseInt(evt.target.value, 10));
-                            }}
-                            placeholder="Сигма"
-                            title="Сигма"
-                        ></input>
-                    </>
-                )}
-
-                <div>
-                    <button onClick={generateData}>Сгенерировать</button>
-                    {generating && (
-                        <div>
-                            <Icon.Loader /> <span>Генерация...</span>
-                        </div>
+                    {dist === "norm" && (
+                        <>
+                            <label htmlFor="avgt_input">σ</label>
+                            <input
+                                id="sigma_input"
+                                type="number"
+                                value={sigma}
+                                onChange={(evt) => {
+                                    setSigma(parseInt(evt.target.value, 10));
+                                }}
+                                placeholder="Сигма"
+                                title="Сигма"
+                            ></input>
+                        </>
                     )}
+
+                    <div>
+                        <button onClick={generateData}>Сгенерировать</button>
+                        {generating && (
+                            <div>
+                                <Icon.Loader /> <span>Генерация...</span>
+                            </div>
+                        )}
+                    </div>
                 </div>
+
+                {distPlot.length > 0 ? (
+                    <ResponsiveContainer width="100%" height={400}>
+                        <BarChart
+                            data={distPlot.map((v) => {
+                                return {
+                                    value: v.count,
+                                    name: v.rangeEnd.toFixed(2)
+                                };
+                            })}
+                            barGap={0}
+                            barCategoryGap={0}
+                        >
+                            <Tooltip />
+                            <XAxis dataKey="name" domain={["auto", "auto"]} />
+                            <YAxis dataKey="value" domain={["auto", "auto"]} />
+                            <CartesianGrid
+                                stroke="#eee"
+                                strokeDasharray="5 5"
+                            />
+                            <Bar
+                                type="monotone"
+                                dataKey="value"
+                                fill="#9b4dca"
+                                maxBarSize={200}
+                            />
+                        </BarChart>
+                    </ResponsiveContainer>
+                ) : (
+                    <div>
+                        <Icon.ArrowUp /> Нажми сгенерировать
+                    </div>
+                )}
             </div>
 
-            {distPlot.length > 0 ? (
-                <ResponsiveContainer width="100%" height={400}>
-                    <BarChart
-                        data={distPlot.map((v) => {
-                            return {
-                                value: v.count,
-                                name: v.rangeEnd.toFixed(2)
-                            };
-                        })}
-                        barGap={0}
-                        barCategoryGap={0}
-                    >
-                        <Tooltip />
-                        <XAxis dataKey="name" domain={["auto", "auto"]} />
-                        <YAxis dataKey="value" domain={["auto", "auto"]} />
-                        <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-                        <Bar
-                            type="monotone"
-                            dataKey="value"
-                            fill="#9b4dca"
-                            maxBarSize={200}
-                        />
-                    </BarChart>
-                </ResponsiveContainer>
-            ) : (
-                <div>
-                    <Icon.ArrowUp /> Нажми сгенерировать
-                </div>
-            )}
-        </div>
+            <Model></Model>
+        </>
     );
 }

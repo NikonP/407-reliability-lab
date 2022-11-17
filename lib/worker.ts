@@ -1,4 +1,4 @@
-export default class Worker {
+export default class SystemWorker {
     queue: Array<any>;
     speed: number;
 
