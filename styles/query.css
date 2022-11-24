@@ -1,0 +1,13 @@
+.query_item {
+    border: 0.1rem solid #9b4dca;
+    border-radius: 0.4rem;
+    padding: 1.0rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2;
+}
+
+.query_item__active {
+    background-color: #9b4dca;
+    color: white;
+}

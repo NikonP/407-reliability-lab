@@ -170,19 +170,39 @@ export default function Model({}: ModelProps) {
                         >
                             <span>Удалить</span> <Icon.Trash2 size={"1em"} />
                         </button>
-                        <ul>
+                        <label>Очередь запросов</label>
+                        <div
+                            style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 5
+                            }}
+                        >
                             {w.queue.map((q, i) => {
                                 if (i === 0) {
                                     return (
-                                        <li className="button button-outline">
-                                            {q.volume}
-                                        </li>
+                                        <div className="query_item query_item__active">
+                                            <b>Обработка...</b>
+                                            <div>
+                                                Осталось: {q.volume.toFixed(2)}
+                                            </div>
+                                        </div>
                                     );
                                 } else {
-                                    return <li>{q.volume}</li>;
+                                    return (
+                                        <div className="query_item">
+                                            <b>
+                                                Время ожидания:{" "}
+                                                {tick - q.creationTime}
+                                            </b>
+                                            <div>
+                                                Осталось: {q.volume.toFixed(2)}
+                                            </div>
+                                        </div>
+                                    );
                                 }
                             })}
-                        </ul>
+                        </div>
                     </blockquote>
                 ))}
             </div>
