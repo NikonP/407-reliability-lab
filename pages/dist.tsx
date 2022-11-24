@@ -8,13 +8,25 @@ export default function Dist() {
     return (
         <div className="container">
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <Link className="button button-outline" href="/">
+                <Link
+                    className="button button-outline"
+                    style={{ display: "flex", alignItems: "center", gap: 4 }}
+                    href="/"
+                >
                     <Icon.Home size={16} /> Главная
                 </Link>
-                <Link className="button" href="/dist">
+                <Link
+                    className="button"
+                    style={{ display: "flex", alignItems: "center", gap: 4 }}
+                    href="/dist"
+                >
                     <Icon.BarChart2 size={16} /> Распределения
                 </Link>
-                <Link className="button button-outline" href="/simulation">
+                <Link
+                    className="button button-outline"
+                    style={{ display: "flex", alignItems: "center", gap: 4 }}
+                    href="/simulation"
+                >
                     <Icon.Cpu size={16} /> Симуляция
                 </Link>
             </div>

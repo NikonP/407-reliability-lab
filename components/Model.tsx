@@ -132,7 +132,10 @@ export default function Model({}: ModelProps) {
                     setWorkers([...workers, new SystemWorker(1)]);
                 }}
             >
-                <span>Добавить пункт обработки</span> <Icon.Plus size={"1em"} />
+                <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                    <span>Добавить пункт обработки</span>{" "}
+                    <Icon.Plus size={16} />
+                </div>
             </button>
 
             <h3>Пункты обработки</h3>
@@ -168,7 +171,15 @@ export default function Model({}: ModelProps) {
                                 setGlobalQueue([...globalQueue, ...w.queue]);
                             }}
                         >
-                            <span>Удалить</span> <Icon.Trash2 size={"1em"} />
+                            <div
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 4
+                                }}
+                            >
+                                <span>Удалить</span> <Icon.Trash2 size={16} />
+                            </div>
                         </button>
                         <label>Очередь запросов</label>
                         <div
