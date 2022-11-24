@@ -8,9 +8,9 @@ interface ModelProps {}
 
 export default function Model({}: ModelProps) {
     const [avgQueryT, setAvgQueryT] = useState(1000);
-    const [avgQueryTSigma, setAvgQueryTSigma] = useState(3);
+    const [avgQueryTSigma, setAvgQueryTSigma] = useState(300);
 
-    const [avgQueryD, setAvgQueryD] = useState(100);
+    const [avgQueryD, setAvgQueryD] = useState(1000);
 
     const [workers, setWorkers] = useState([
         new SystemWorker(1),
@@ -20,8 +20,6 @@ export default function Model({}: ModelProps) {
     const [globalQueue, setGlobalQueue] = useState(new Array<Query>());
 
     const [tick, setTick] = useState(0);
-
-    // const [nextQueryDelay, setNextQueryDelay] = useState(0);
 
     const [nextQueryTime, setNextQueryTime] = useState(0);
 

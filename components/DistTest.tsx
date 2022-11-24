@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { getRandomExp, getRandomNorm } from "../lib/randomizer";
 import * as Icon from "react-feather";
 import {
     Bar,
@@ -10,6 +9,7 @@ import {
     XAxis,
     YAxis
 } from "recharts";
+import { getRandomExp, getRandomNorm } from "../lib/randomizer";
 
 interface DistData {
     count: number;
@@ -48,8 +48,6 @@ export default function DistTest() {
             numbers[i] = randomFunc();
         }
 
-        // let numbers = Array.from({ length: count }, () => randomFunc(avgT)); // [...Array(count)].map(() => randomFunc(avgT));
-
         let maxVal = -Infinity;
         let minVal = Infinity;
         let numbersLength = numbers.length;
@@ -59,17 +57,12 @@ export default function DistTest() {
             minVal = Math.min(minVal, numbers[i]);
         }
 
-        // let maxVal = Math.max.apply(null, numbers);
-        // let minVal = Math.min.apply(null, numbers);
-
         console.log("Interval count", intervalCount);
         console.log("min-max", minVal, maxVal);
 
         let step = (maxVal - minVal) / intervalCount;
 
         console.log("step", step);
-
-        // let intervals = new Array<number>(intervalCount);
 
         let distData = new Array<DistData>();
 

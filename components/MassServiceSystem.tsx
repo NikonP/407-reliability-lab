@@ -1,20 +1,7 @@
 import { useEffect, useState } from "react";
-import { getRandomExp, getRandomNorm } from "../lib/randomizer";
-import * as Icon from "react-feather";
 
-import {
-    LineChart,
-    BarChart,
-    Line,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Bar,
-    ResponsiveContainer,
-    Tooltip
-} from "recharts";
-import Model from "./Model";
 import DistTest from "./DistTest";
+import Model from "./Model";
 
 interface MSSProps {}
 
@@ -25,16 +12,6 @@ interface DistData {
 }
 
 export default function MassServiceSystem({}: MSSProps) {
-    // useEffect(() => {
-    //     const timeout = setTimeout(() => {
-    //         setValue([...values.slice(-10), getRandomExp(10)]);
-    //     }, 500);
-
-    //     return () => {
-    //         clearTimeout(timeout);
-    //     };
-    // });
-
     const [tick, setTick] = useState(0);
 
     useEffect(() => {
@@ -57,7 +34,9 @@ export default function MassServiceSystem({}: MSSProps) {
                 <DistTest></DistTest>
             </div>
 
-            <Model></Model>
+            <div>
+                <Model></Model>
+            </div>
         </>
     );
 }
