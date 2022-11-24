@@ -134,7 +134,7 @@ export default function Model({}: ModelProps) {
                     setWorkers([...workers, new SystemWorker(1)]);
                 }}
             >
-                <span>Добавить пунт обработки</span> <Icon.Plus size={"1em"} />
+                <span>Добавить пункт обработки</span> <Icon.Plus size={"1em"} />
             </button>
 
             <h3>Пункты обработки</h3>
@@ -142,7 +142,7 @@ export default function Model({}: ModelProps) {
             <div className="row">
                 {workers.map((w, i) => (
                     <blockquote className="column">
-                        <div>Пунт обработки №{i}</div>
+                        <div>Пункт обработки №{i}</div>
                         <div>Время простоя: {w.idleTime}</div>
                         <div>
                             <label>Скорость обработки</label>
