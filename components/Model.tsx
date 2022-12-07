@@ -13,8 +13,8 @@ export default function Model({}: ModelProps) {
     const [avgQueryD, setAvgQueryD] = useState(1000);
 
     const [workers, setWorkers] = useState([
-        new SystemWorker(1),
         new SystemWorker(1)
+        // new SystemWorker(1)
     ]);
 
     const [globalQueue, setGlobalQueue] = useState(new Array<Query>());
@@ -54,16 +54,33 @@ export default function Model({}: ModelProps) {
         for (let w of workersCopy) {
             let ql = w.queue.length;
 
+            w.avgQueriesInQueueCounter += 1;
+            w.avgQueriesInQueue += w.queue.length;
+
             if (ql > 0) {
                 if (w.queue[0].executionStartTime === 0) {
                     w.queue[0].executionStartTime = tick;
+                    // w.proccessQueriesCount += 1;
+                    // w.avgTimeInQueue += tick / w.proccessQueriesCount;
+                    // w.timeInQueueSum += w.queue[0].volume;
+                    // w.proccessQueriesCount += 1;
                 }
                 w.queue[0].volume -= w.speed;
             } else {
                 w.idleTime += 1;
             }
 
-            w.queue = w.queue.filter((q) => q.volume > 0);
+            if (w.queue.length > 0) {
+                if (w.queue[0].volume <= 0) {
+                    let query = w.queue.shift();
+                    if (query !== undefined) {
+                        w.proccessQueriesCount += 1;
+                        w.timeInQueueSum += tick - query.creationTime;
+                    }
+                }
+            }
+
+            // w.queue = w.queue.filter((q) => q.volume > 0);
         }
 
         setWorkers(workersCopy);
@@ -145,6 +162,15 @@ export default function Model({}: ModelProps) {
                     <blockquote className="column">
                         <div>Пункт обработки №{i}</div>
                         <div>Время простоя: {w.idleTime}</div>
+                        <div>Обработано запросов: {w.proccessQueriesCount}</div>
+                        <div>
+                            Среднее время в очереди:{" "}
+                            {w.timeInQueueSum / w.proccessQueriesCount}
+                        </div>
+                        <div>
+                            Среднее количество запросов в очереди:{" "}
+                            {w.avgQueriesInQueue / w.avgQueriesInQueueCounter}
+                        </div>
                         <div>
                             <label>Скорость обработки</label>
                             <input
