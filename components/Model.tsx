@@ -165,11 +165,15 @@ export default function Model({}: ModelProps) {
                         <div>Обработано запросов: {w.proccessQueriesCount}</div>
                         <div>
                             Среднее время в очереди:{" "}
-                            {w.timeInQueueSum / w.proccessQueriesCount}
+                            {(
+                                w.timeInQueueSum / w.proccessQueriesCount
+                            ).toFixed(2)}
                         </div>
                         <div>
                             Среднее количество запросов в очереди:{" "}
-                            {w.avgQueriesInQueue / w.avgQueriesInQueueCounter}
+                            {(
+                                w.avgQueriesInQueue / w.avgQueriesInQueueCounter
+                            ).toFixed(2)}
                         </div>
                         <div>
                             <label>Скорость обработки</label>
